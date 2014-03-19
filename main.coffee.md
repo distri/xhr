@@ -1,6 +1,13 @@
 XHR
 ===
 
+Example
+
+>     #! demo
+>     Request
+>       url: "https://api.github.com/gists"
+>       complete: OUT
+
     module.exports = ({url, data, method, success, error, complete}) ->
       method ?= "GET"
       data ?= {}
@@ -40,3 +47,9 @@ XHR
           error xhr
 
       return xhr
+
+Live Examples
+-------------
+
+>     #! setup
+>     require("/interactive_runtime")
