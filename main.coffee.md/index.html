@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html manifest="manifest.appcache?1395268004990">
+<html manifest="manifest.appcache?1395272372666">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
@@ -188,7 +188,25 @@ require('./main')
     "main.coffee.md": {
       "path": "main.coffee.md",
       "mode": "100644",
-      "content": "XHR\n===\n\n    module.exports = ({url, data, method, success, error, complete}) ->\n      method ?= \"GET\"\n      data ?= {}\n\n      xhr = new XMLHttpRequest\n      attachListeners(xhr)\n      xhr.open(method, url, true)\n\n      if method is \"POST\"\n        data = Object.keys(data).reduce (formData, key) ->\n          formData.append(key, data[key])\n\n          return formData\n        , new FormData\n\n      xhr.send data\n\n      return xhr\n\n    attachListeners = (xhr, success, error, progress) ->\n      if progress\n        xhr.addEventListener \"progress\", (event) ->\n          if event.loaded?\n            progress(event.loaded / event.total)\n          else\n            progress()\n\n      if success\n        xhr.addEventListener \"load\", ->\n          success xhr.response\n\n      if error\n        xhr.addEventListener \"error\", ->\n          error xhr\n\n        xhr.addEventListener \"abort\", ->\n          error xhr\n\n      return xhr\n",
+      "content": "XHR\n===\n\nExample\n\n>     #! demo\n>     Request\n>       url: \"https://api.github.com/gists\"\n>       complete: OUT\n\n    module.exports = ({url, data, method, success, error, complete}) ->\n      method ?= \"GET\"\n      data ?= {}\n\n      xhr = new XMLHttpRequest\n      attachListeners(xhr)\n      xhr.open(method, url, true)\n\n      if method is \"POST\"\n        data = Object.keys(data).reduce (formData, key) ->\n          formData.append(key, data[key])\n\n          return formData\n        , new FormData\n\n      xhr.send data\n\n      return xhr\n\n    attachListeners = (xhr, success, error, progress) ->\n      if progress\n        xhr.addEventListener \"progress\", (event) ->\n          if event.loaded?\n            progress(event.loaded / event.total)\n          else\n            progress()\n\n      if success\n        xhr.addEventListener \"load\", ->\n          success xhr.response\n\n      if error\n        xhr.addEventListener \"error\", ->\n          error xhr\n\n        xhr.addEventListener \"abort\", ->\n          error xhr\n\n      return xhr\n\nLive Examples\n-------------\n\n>     #! setup\n>     require(\"/interactive_runtime\")\n",
+      "type": "blob"
+    },
+    "interactive_docs.coffee.md": {
+      "path": "interactive_docs.coffee.md",
+      "mode": "100644",
+      "content": "",
+      "type": "blob"
+    },
+    "lib/util.coffee.md": {
+      "path": "lib/util.coffee.md",
+      "mode": "100644",
+      "content": "Utility Functions\n-----------------\n\n    module.exports =\n\nEvaluate a program with a given environment object.\n\nThe values of the environment are mapped to local variables with names equal to\nthe keys.\n\nThe given program is then run with that environment and optionally a context for\n`this`.\n\n      executeWithContext: (program, environment, context) ->\n        args = Object.keys(environment)\n\n        values = args.map (name) ->\n          environment[name]\n\n        Function(args..., program).apply(context, values)\n",
+      "type": "blob"
+    },
+    "interactive_runtime.coffee.md": {
+      "path": "interactive_runtime.coffee.md",
+      "mode": "100644",
+      "content": "Interactive Runtime\n===================\n\nRegister our interactive documentation runtime components.\n\nThese requires set up our interactive documentation environment.\n\n    {executeWithContext} = require(\"/util\")\n\n`demo` runs the example code when you press the run button.\n\n    Interactive.register \"demo\", ({source, runtimeElement}) ->\n      # HACK: using the element to hold our state\n      runtimeElement.program = CoffeeScript.compile(source)\n\n      # Init\n      if runtimeElement.is(\":empty\")\n        runButton = $ \"<button>\",\n          text: \"Run\"\n          css:\n            position: \"absolute\"\n            marginTop: \"-2.5em\"\n            marginLeft: \"-1.5em\"\n          click: ->\n            outputElement.textContent = \"\"\n\n            executeProgram runtimeElement.program, outputElement\n\n        outputElement = document.createElement \"pre\"\n\n        runtimeElement\n          .append(runButton)\n          .append(outputElement)\n\nHelpers\n-------\n\nExecute a program attaching it's output to the output element.\n\n    executeProgram = (program, outputElement) ->\n      executeWithContext program,\n        OUT: (atom) ->\n          outputElement.textContent += \"#{atom}\\n\"\n",
       "type": "blob"
     }
   },
@@ -201,6 +219,21 @@ require('./main')
     "main": {
       "path": "main",
       "content": "(function() {\n  var attachListeners;\n\n  module.exports = function(_arg) {\n    var complete, data, error, method, success, url, xhr;\n    url = _arg.url, data = _arg.data, method = _arg.method, success = _arg.success, error = _arg.error, complete = _arg.complete;\n    if (method == null) {\n      method = \"GET\";\n    }\n    if (data == null) {\n      data = {};\n    }\n    xhr = new XMLHttpRequest;\n    attachListeners(xhr);\n    xhr.open(method, url, true);\n    if (method === \"POST\") {\n      data = Object.keys(data).reduce(function(formData, key) {\n        formData.append(key, data[key]);\n        return formData;\n      }, new FormData);\n    }\n    xhr.send(data);\n    return xhr;\n  };\n\n  attachListeners = function(xhr, success, error, progress) {\n    if (progress) {\n      xhr.addEventListener(\"progress\", function(event) {\n        if (event.loaded != null) {\n          return progress(event.loaded / event.total);\n        } else {\n          return progress();\n        }\n      });\n    }\n    if (success) {\n      xhr.addEventListener(\"load\", function() {\n        return success(xhr.response);\n      });\n    }\n    if (error) {\n      xhr.addEventListener(\"error\", function() {\n        return error(xhr);\n      });\n      xhr.addEventListener(\"abort\", function() {\n        return error(xhr);\n      });\n    }\n    return xhr;\n  };\n\n}).call(this);\n\n//# sourceURL=main.coffee",
+      "type": "blob"
+    },
+    "interactive_docs": {
+      "path": "interactive_docs",
+      "content": "(function() {\n\n\n}).call(this);\n\n//# sourceURL=interactive_docs.coffee",
+      "type": "blob"
+    },
+    "lib/util": {
+      "path": "lib/util",
+      "content": "(function() {\n  var __slice = [].slice;\n\n  module.exports = {\n    executeWithContext: function(program, environment, context) {\n      var args, values;\n      args = Object.keys(environment);\n      values = args.map(function(name) {\n        return environment[name];\n      });\n      return Function.apply(null, __slice.call(args).concat([program])).apply(context, values);\n    }\n  };\n\n}).call(this);\n\n//# sourceURL=lib/util.coffee",
+      "type": "blob"
+    },
+    "interactive_runtime": {
+      "path": "interactive_runtime",
+      "content": "(function() {\n  var executeProgram, executeWithContext;\n\n  executeWithContext = require(\"/util\").executeWithContext;\n\n  Interactive.register(\"demo\", function(_arg) {\n    var outputElement, runButton, runtimeElement, source;\n    source = _arg.source, runtimeElement = _arg.runtimeElement;\n    runtimeElement.program = CoffeeScript.compile(source);\n    if (runtimeElement.is(\":empty\")) {\n      runButton = $(\"<button>\", {\n        text: \"Run\",\n        css: {\n          position: \"absolute\",\n          marginTop: \"-2.5em\",\n          marginLeft: \"-1.5em\"\n        },\n        click: function() {\n          outputElement.textContent = \"\";\n          return executeProgram(runtimeElement.program, outputElement);\n        }\n      });\n      outputElement = document.createElement(\"pre\");\n      return runtimeElement.append(runButton).append(outputElement);\n    }\n  });\n\n  executeProgram = function(program, outputElement) {\n    return executeWithContext(program, {\n      OUT: function(atom) {\n        return outputElement.textContent += \"\" + atom + \"\\n\";\n      }\n    });\n  };\n\n}).call(this);\n\n//# sourceURL=interactive_runtime.coffee",
       "type": "blob"
     }
   },
